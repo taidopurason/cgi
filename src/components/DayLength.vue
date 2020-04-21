@@ -4,6 +4,7 @@
             <b-col>
                 <h3>Sunrise time</h3>
                 <div class="time">{{sunriseTime}}</div>
+                <div>UTC</div>
             </b-col>
             <b-col>
                 <h3>Day length</h3>
@@ -12,6 +13,7 @@
             <b-col>
                 <h3>Sunset time</h3>
                 <div class="time">{{sunsetTime}}</div>
+                <div>UTC</div>
             </b-col>
         </b-row>
 
@@ -64,8 +66,8 @@
             calculateTime(location, date) {
                 const times = SunCalc.getTimes(date, location.lat, location.long);
                 if (times.sunset instanceof Date && !isNaN(times.sunset)) {
-                    this.sunriseTime = this.formatTimeToString(times.sunrise.getHours(), times.sunrise.getMinutes());
-                    this.sunsetTime = this.formatTimeToString(times.sunset.getHours(), times.sunset.getMinutes());
+                    this.sunriseTime = this.formatTimeToString(times.sunrise.getUTCHours(), times.sunrise.getUTCMinutes());
+                    this.sunsetTime = this.formatTimeToString(times.sunset.getUTCHours(), times.sunset.getUTCMinutes());
 
                     const diffTime = Math.abs(times.sunrise - times.sunset);
                     const hours = Math.floor(diffTime / (1000 * 60 * 60));
