@@ -1,8 +1,9 @@
 <template>
     <div class="container">
+        <ChartContainer :location="location" :start-date="startDate" :end-date="endDate"></ChartContainer>
         <div class="row">
             <div class="col-sm">
-                <Form :submit="updateLocation"></Form>
+                <Form :submit="updateLocation" :current-location="location"></Form>
             </div>
         </div>
         <div class="row">
@@ -24,17 +25,21 @@
 </template>
 
 <script>
+    //import { getSunrise, getSunset } from 'sunrise-sunset-js';
     import SunCalc from 'suncalc';
     import Form from "./Form";
     import Map from "./Map";
+    import ChartContainer from "./ChartContainer";
 
     export default {
         name: "DayLength",
-        components: {Map, Form},
+        components: {ChartContainer, Map, Form},
         data: () => {
             return {
                 location: {lat: 58.378025, long: 26.728493},
                 date: new Date(),
+                startDate:new Date("2020-04-20"),
+                endDate:new Date("2020-07-22"),
                 sunriseTime: "",
                 sunsetTime: "",
                 dayLength: ""
@@ -48,7 +53,6 @@
             },
             calculateTime(location, date) {
                 const times = SunCalc.getTimes(date, location.lat, location.long);
-
                 this.sunriseTime = this.formatTimeToString(times.sunrise.getHours(), times.sunrise.getMinutes());
                 this.sunsetTime = this.formatTimeToString(times.sunset.getHours(),times.sunset.getMinutes());
 
@@ -69,7 +73,6 @@
         },
         created() {
             this.calculateTime(this.location, new Date())
-
         }
     }
 
