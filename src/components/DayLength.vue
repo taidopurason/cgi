@@ -1,26 +1,38 @@
 <template>
     <div class="container">
-        <ChartContainer :location="location" :start-date="startDate" :end-date="endDate"></ChartContainer>
-        <div class="row">
-            <div class="col-sm">
-                <Form :submit="updateLocation" :current-location="location"></Form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm">
-                <h2>Sunrise time</h2>
+        <b-row class="mt-2">
+            <b-col>
+                <h3>Sunrise time</h3>
                 <div class="time">{{sunriseTime}}</div>
-            </div>
-            <div class="col-sm">
-                <h2>Sunset time</h2>
-                <div class="time">{{sunsetTime}}</div>
-            </div>
-            <div class="col-sm">
-                <h2>Day length</h2>
+            </b-col>
+            <b-col>
+                <h3>Day length</h3>
                 <div class="time">{{dayLength}}</div>
-            </div>
-        </div>
-        <Map :location="location" :change-location="updateLocation"></Map>
+            </b-col>
+            <b-col>
+                <h3>Sunset time</h3>
+                <div class="time">{{sunsetTime}}</div>
+            </b-col>
+        </b-row>
+
+        <b-row class="mt-2">
+            <b-col>
+                <History :location="location"></History>
+            </b-col>
+        </b-row>
+
+        <b-row class="mt-5">
+            <b-col>
+                <Form :submit="updateLocation" :current-location="location"></Form>
+            </b-col>
+        </b-row>
+
+        <b-row class="mt-2">
+            <b-col>
+                <Map :location="location" :change-location="updateLocation"></Map>
+            </b-col>
+        </b-row>
+
     </div>
 </template>
 
@@ -29,39 +41,48 @@
     import SunCalc from 'suncalc';
     import Form from "./Form";
     import Map from "./Map";
-    import ChartContainer from "./ChartContainer";
+    import History from "./History";
 
     export default {
         name: "DayLength",
-        components: {ChartContainer, Map, Form},
+        components: {History, Map, Form},
         data: () => {
             return {
                 location: {lat: 58.378025, long: 26.728493},
                 date: new Date(),
-                startDate:new Date("2020-04-20"),
-                endDate:new Date("2020-07-22"),
                 sunriseTime: "",
                 sunsetTime: "",
                 dayLength: ""
             }
         },
         methods: {
-            updateLocation(location, date = this.date){
+            updateLocation(location, date = this.date) {
                 this.calculateTime(location, date);
                 this.date = date;
                 this.location = location
             },
             calculateTime(location, date) {
                 const times = SunCalc.getTimes(date, location.lat, location.long);
-                this.sunriseTime = this.formatTimeToString(times.sunrise.getHours(), times.sunrise.getMinutes());
-                this.sunsetTime = this.formatTimeToString(times.sunset.getHours(),times.sunset.getMinutes());
+                if (times.sunset instanceof Date && !isNaN(times.sunset)) {
+                    this.sunriseTime = this.formatTimeToString(times.sunrise.getHours(), times.sunrise.getMinutes());
+                    this.sunsetTime = this.formatTimeToString(times.sunset.getHours(), times.sunset.getMinutes());
 
-                const diffTime = Math.abs(times.sunrise - times.sunset);
-                const hours = Math.floor(diffTime / (1000 * 60 * 60));
-                const minutes = Math.floor(diffTime / (1000 * 60) % 60);
-                this.dayLength = hours + " h " + minutes + " mins";
+                    const diffTime = Math.abs(times.sunrise - times.sunset);
+                    const hours = Math.floor(diffTime / (1000 * 60 * 60));
+                    const minutes = Math.floor(diffTime / (1000 * 60) % 60);
+                    this.dayLength = hours + " h " + minutes + (minutes === 1 ? " mins" : " min");
+                } else {
+                    this.sunriseTime = "--:--";
+                    this.sunsetTime = "--:--";
+                    if (SunCalc.getPosition(date, location.lat, location.long).altitude > 0) {
+                        this.dayLength = "24 h 0 mins"
+                    } else {
+                        this.dayLength = "0 h 0 mins"
+                    }
+                }
+
             },
-            formatTimeToString(hours, mins){
+            formatTimeToString(hours, mins) {
                 hours = hours.toString();
                 mins = mins.toString();
                 if (hours.length === 1)
@@ -79,9 +100,10 @@
 </script>
 
 <style scoped>
-    .time{
+    .time {
         font-weight: bold;
         font-size: 2em;
     }
+
 
 </style>

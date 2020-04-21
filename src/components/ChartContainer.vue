@@ -1,7 +1,9 @@
 <template>
-    <LineChart
-            :chartdata="chartdata"
-            :options="options" v-if="this.renderComponent"/>
+    <div>
+        <LineChart :height="400"
+                :chartdata="chartdata"
+                :options="options" v-if="this.renderComponent"/>
+    </div>
 </template>
 
 <script>
@@ -30,16 +32,32 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                legend: {display : false},
+                legend: {display: false},
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'minutes'
+                        }
+                    }]
+                }
             },
             renderComponent: true
         }),
         methods: {
-            calculateDayLength(date){
+            calculateDayLength(date) {
                 const times = SunCalc.getTimes(date, this.location.lat, this.location.long);
-                return Math.abs(times.sunrise - times.sunset)
+                if (times.sunset instanceof Date && !isNaN(times.sunset)) {
+                    return Math.floor(Math.abs(times.sunrise - times.sunset) / (1000 * 60))
+                } else {
+                    if (SunCalc.getPosition(date, this.location.lat, this.location.long).altitude > 0) {
+                        return 60 * 24
+                    } else {
+                        return 0
+                    }
+                }
             },
-            calculateData(){
+            calculateData() {
                 this.chartdata.labels = [];
                 this.chartdata.datasets[0].data = [];
                 for (let date = new Date(this.startDate); date <= this.endDate; date.setDate(date.getDate() + 1)) {
@@ -55,12 +73,21 @@
                 });
             }
         },
+        mounted(){
+            this.calculateData()
+        },
         watch: {
             location: {
-                handler(){
+                handler() {
                     this.calculateData()
                 },
                 deep: true
+            },
+            startDate: function() {
+                this.calculateData();
+            },
+            endDate: function() {
+                this.calculateData();
             }
         }
     }

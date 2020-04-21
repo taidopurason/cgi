@@ -53,13 +53,10 @@
                     .addTo(this.map);
                 this.marker.on('dragend', this.updateLocation);
                 this.updateLocation()
-            },
-            initLayers() {
-            },
+            }
         },
         mounted() {
             this.initMap();
-            this.initLayers();
         },
         watch: {
             location: {
