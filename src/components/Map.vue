@@ -74,6 +74,6 @@
     @import "https://unpkg.com/leaflet@1.2.0/dist/leaflet.css";
 
     .map {
-        height: 600px;
+        height: 500px;
     }
 </style>

@@ -8,7 +8,6 @@
                     id="longitude"
             ></b-input>
         </b-input-group>
-        <label for="date">Choose a date</label>
         <b-form-datepicker v-model="date" id="date" class="mb-2"></b-form-datepicker>
         <b-button variant="primary" @click="submit({lat: location.lat, long: location.long}, new Date(date))">Find</b-button>
     </b-form>
