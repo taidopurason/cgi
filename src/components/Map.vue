@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <div id="map" class="map"></div>
-    </div>
+    <div id="map" class="map"></div>
 </template>
 
 <script>
@@ -15,6 +13,11 @@
                 map: null,
                 tileLayer: null,
                 layers: [],
+                icon: L.divIcon({
+                    className: 'leaflet-custom-marker',
+                    iconSize: new L.Point(36, 36),
+                    iconAnchor: [17, 34]
+                })
             };
         },
         props: {
@@ -49,7 +52,7 @@
                 this.initMarker(latlng.lat, latlng.lng);
             },
             initMarker(lat, long) {
-                this.marker = L.marker([lat, long], {title: "MyPoint", draggable: true})
+                this.marker = L.marker([lat, long], {title: "Location", draggable: true, icon: this.icon})
                     .addTo(this.map);
                 this.marker.on('dragend', this.updateLocation);
                 this.updateLocation()
@@ -60,7 +63,7 @@
         },
         watch: {
             location: {
-                handler(){
+                handler() {
                     this.changeLocation(this.location);
                     this.map.setView([this.location.lat, this.location.long]);
                 },
@@ -75,5 +78,10 @@
 
     .map {
         height: 500px;
+    }
+
+    .leaflet-custom-marker {
+        background: transparent;
+        background-image: url("../assets/baseline_room_black_18dp.png");
     }
 </style>

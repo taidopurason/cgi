@@ -1,2 +1,4 @@
-# cgi
-CGI proovitöö
+# CGI proovitöö
+## Seadistamine
+git clone ...
+npm install
