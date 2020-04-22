@@ -4,7 +4,7 @@ Kloonige repo:
 ```
 git clone https://github.com/taidopurason/cgi
 ```
-Liikuge projekti kausta (käsuga `cd cgi`) ning käivitage seal järgmised käsud:
+Liikuge projekti kausta (käsuga `cd cgi`) ning käivitage seal järgmised käsud (eeldusel, et [npm](https://www.npmjs.com/get-npm) on installitud):
 ```
 npm install
 
