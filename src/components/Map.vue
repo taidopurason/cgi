@@ -66,6 +66,10 @@
                 handler() {
                     this.changeLocation(this.location);
                     this.map.setView([this.location.lat, this.location.long]);
+                    let latlng = this.marker.getLatLng();
+                    if(latlng.lat !== this.location.lat || latlng.lng !== this.location.long){
+                        this.moveMarker({latlng: {lat: this.location.lat, lng: this.location.long}})
+                    }
                 },
                 deep: true
             }
