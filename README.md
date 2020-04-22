@@ -32,7 +32,7 @@ uute andmetega.
 
 Kokku kulutasin lahendamiseks hinnanguliselt 10 tundi.
 Päris mitmete asjade jaoks jäi aega veidi puudu ning oleksin soovinud veel lisada:
-* Sisendi valideerimise,
+* Sisendi valideerimise (sellega ka alustasin, kuid ei jõudnud valmis),
 * Kellaaegade kuvamine ka vastavas ajavööndis,
 * Automaatne asukoha tuvastus,
 
