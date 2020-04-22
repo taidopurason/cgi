@@ -1,15 +1,15 @@
 <template>
     <b-form>
         <b-input-group inline class="mb-2">
-            <b-input v-model="location.lat"
+            <b-input alt="latitude" v-model="location.lat"
                     id="latitude"
             ></b-input>
-            <b-input v-model="location.long"
+            <b-input alt="longitude" v-model="location.long"
                     id="longitude"
             ></b-input>
         </b-input-group>
         <b-form-datepicker v-model="date" id="date" class="mb-2"></b-form-datepicker>
-        <b-button variant="primary" @click="submit({lat: location.lat, long: location.long}, new Date(date))">Find</b-button>
+        <b-button variant="primary" @click="submit({lat: location.lat, long: location.long}, new Date(date))">Update</b-button>
     </b-form>
 </template>
 

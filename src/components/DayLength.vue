@@ -39,7 +39,6 @@
 </template>
 
 <script>
-    //import { getSunrise, getSunset } from 'sunrise-sunset-js';
     import SunCalc from 'suncalc';
     import Form from "./Form";
     import Map from "./Map";
